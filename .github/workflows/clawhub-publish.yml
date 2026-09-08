@@ -11,7 +11,7 @@ jobs:
   publish:
     uses: openclaw/clawhub/.github/workflows/skill-publish.yml@main
     with:
-      skill_path: "."
+      skill_path: "penny-web-search"
       dry_run: false
       changelog: "Initial Penny Web Search release"
       categories: "search"

@@ -1,0 +1,16 @@
+name: Publish Penny to ClawHub
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    uses: openclaw/clawhub/.github/workflows/skill-publish.yml@main
+    with:
+      skill_path: "."
+      dry_run: false
+      changelog: "Initial Penny Web Search release"
+      categories: "search"
+      topics: "web-search,x402,agentcash,research"
+    secrets:
+      clawhub_token: ${{ secrets.CLAWHUB_TOKEN }}

@@ -14,7 +14,6 @@ jobs:
       skill_path: "penny-web-search"
       dry_run: false
       changelog: "Initial Penny Web Search release"
-      categories: "search"
       topics: "web-search,x402,agentcash,research"
     secrets:
       clawhub_token: ${{ secrets.CLAWHUB_TOKEN }}

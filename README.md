@@ -4,10 +4,10 @@ Portable agent skill for using PennyAPI as a paid real-time web-search provider 
 
 ## Install
 
-Replace `YOUR_GITHUB_USERNAME` with your GitHub username after you publish this repository:
+Replace `ayoubsalem-spec` with your GitHub username after you publish this repository:
 
 ```bash
-npx skills add YOUR_GITHUB_USERNAME/penny-web-search-skill --all --yes
+npx skills add ayoubsalem-spec/penny-web-search-skill --all --yes
 ```
 
 ## What it does

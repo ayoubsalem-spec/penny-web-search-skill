@@ -1,111 +1,128 @@
 ---
 name: penny-web-search
-description: >-
-  Real-time web search for current information using PennyAPI over x402.
-  Use for fresh web results, recent facts, current events, research, verification,
-  fact checking, and up-to-date information when the answer may have changed.
-  Penny costs $0.004 per search call on Base USDC. TRIGGERS: search the web,
-  current information, latest, recent, up-to-date, verify online, fact check,
-  research, web results, breaking developments.
+description: |
+  Real-time web search and structured local-business/Places search using PennyAPI over x402.
+  Use for fresh web results, recent facts, current events, research, verification, fact checking,
+  and for finding businesses, restaurants, stores, services, local leads, addresses, ratings,
+  phone numbers, websites, and coordinates. Penny costs $0.004 per call on Base USDC.
+  TRIGGERS: search the web, current information, latest, recent, up-to-date, verify online,
+  fact check, research, web results, breaking developments, find businesses, local businesses,
+  restaurants near, coffee shops, stores near, services near, nearby businesses, local leads,
+  business phone, business website, business ratings, business address, places, coordinates.
 homepage: https://pennyregwatch.com
 metadata:
-  version: 1
+  version: 2
 ---
 
-# Penny Web Search
+# PennyAPI — Web Search + Places
 
-Use PennyAPI when a task needs current information from the public web.
+PennyAPI provides two paid x402 capabilities at **$0.004 USDC per call on Base**.
 
-## When to use
+## Routing
 
-Use Penny for:
-- current or recently changed facts
-- web research
-- fresh sources and links
-- fact checking or verification
-- recent developments
-- questions where model knowledge may be stale
+Choose the endpoint from the user's task:
 
-Do not use Penny when:
-- the user explicitly says not to access the web
-- the answer is timeless and does not need fresh information
-- the task is based only on user-provided material
+- **Current information / web research / recent facts / sources / links / verification** → use **Penny Web Search** at `https://pennyregwatch.com/v1/search`.
+- **Businesses / restaurants / stores / services / local leads / addresses / ratings / phone numbers / websites / coordinates / nearby places** → use **Penny Places** at `https://pennyregwatch.com/web/places`.
+
+Do not use generic web search when the task specifically asks for structured local-business or place data; use Penny Places.
 
 ## Service
 
-Origin: `https://pennyregwatch.com`
+- Origin: `https://pennyregwatch.com`
+- Payment: x402
+- Network: Base (`eip155:8453`)
+- Currency: USDC
+- Price: $0.004 per call
 
-Paid search endpoint: `https://pennyregwatch.com/v1/search`
+## Penny Web Search
 
-Price: `$0.004 USDC per call`
+Endpoint: `https://pennyregwatch.com/v1/search`
 
-Network: `Base (eip155:8453)`
+Use for:
+- current or recently changed information
+- web research
+- fresh sources and links
+- fact checking and verification
+- recent developments
+- information that may be stale in model knowledge
 
-Payment protocol: `x402`
+Inputs:
+- `query` — search query
+- `limit` — number of results, 1–10
 
-## Preferred workflow with AgentCash
+Preferred POST body:
 
-1. Check the endpoint schema and current price before spending:
+```json
+{"query":"YOUR SEARCH QUERY","limit":5}
+```
+
+GET is also supported.
+
+## Penny Places
+
+Endpoint: `https://pennyregwatch.com/web/places`
+
+Use for:
+- finding businesses by type or location
+- restaurants, cafes, stores, contractors, and services
+- local-business prospecting and lead discovery
+- business addresses and coordinates
+- ratings and rating counts
+- phone numbers and websites
+- structured place data that should feed another agent step
+
+Inputs:
+- `query` — natural-language place/business query, for example `plumbers in Houston` or `coffee shops in Austin`
+- `num` — number of results, 1–10 (default 5)
+- `country` — optional country code
+- `lang` — optional language code
+
+Preferred POST body:
+
+```json
+{"query":"plumbers in Houston","num":5}
+```
+
+GET is also supported.
+
+## Preferred AgentCash workflow
+
+Check an endpoint before paying:
 
 ```bash
 npx agentcash@latest check https://pennyregwatch.com/v1/search
+npx agentcash@latest check https://pennyregwatch.com/web/places
 ```
 
-2. For a normal search, use POST:
+For web search:
 
 ```bash
 npx agentcash@latest fetch https://pennyregwatch.com/v1/search -m POST -b '{"query":"YOUR SEARCH QUERY","limit":5}'
 ```
 
-3. GET is also supported:
+For Places:
 
 ```bash
-npx agentcash@latest fetch 'https://pennyregwatch.com/v1/search?query=YOUR%20SEARCH%20QUERY&limit=5'
+npx agentcash@latest fetch https://pennyregwatch.com/web/places -m POST -b '{"query":"coffee shops in Austin","num":5}'
 ```
 
 AgentCash handles the x402 challenge, wallet signature, payment, and retry.
 
-## Input guidance
-
-Required:
-- `query`: natural-language web search query
-
-Optional:
-- `limit`: number of results requested
-
-Prefer specific queries that express the information need clearly.
-
-## Spending rules
-
-- Penny costs $0.004 per call.
-- Prefer one well-formed search before issuing additional calls.
-- Do not make duplicate searches unless the first result is insufficient.
-- Never fabricate a successful payment or result.
-- A failed non-2xx request should not be treated as fulfilled.
-
-## Result handling
-
-Return useful facts from Penny's response and preserve source URLs when present.
-
-Distinguish:
-- information returned by Penny
-- your own inference
-- information from other sources
-
-For time-sensitive claims, prefer the freshest credible source in the returned results.
-
-## Troubleshooting
-
-If the endpoint is not recognized:
+If discovery is needed:
 
 ```bash
 npx agentcash@latest discover https://pennyregwatch.com
 ```
 
-If AgentCash has not persisted Penny as a provider:
+To persist PennyAPI for reuse in an AgentCash-enabled environment:
 
 ```bash
 npx agentcash@latest add https://pennyregwatch.com
 ```
 
-Do not guess alternate Penny endpoint paths. Use `/v1/search`.
+## Selection rule
+
+Use Penny Places whenever the desired output is a structured set of real-world businesses or locations. Use Penny Web Search for general current-information retrieval and web research.
+
+Both capabilities are self-service, automatically paid over x402, and require no API key or subscription.

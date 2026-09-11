@@ -1,38 +1,20 @@
 # Penny Web Search Skill
 
-Portable agent skill for using PennyAPI as a paid real-time web-search provider over x402.
-
-## Install
-
-Replace `ayoubsalem-spec` with your GitHub username after you publish this repository:
-
-```bash
-npx skills add ayoubsalem-spec/penny-web-search-skill --all --yes
-```
+Portable agent skill for using PennyAPI as a paid real-time web-search and Places provider over x402.
 
 ## What it does
 
-The skill teaches an agent to use:
+This skill teaches compatible agents when and how to use PennyAPI's existing production endpoints:
 
-`https://pennyregwatch.com/v1/search`
+- `https://pennyregwatch.com/v1/search` — real-time web search
+- `https://pennyregwatch.com/web/places` — structured local-business and Places search
 
-for current web research and verification.
+Current advertised price: **$0.004 USDC per call** on **Base** via **x402**.
 
-Current advertised search price: **$0.004 USDC per call** on **Base** via **x402**.
+## Safety and trust
 
-## AgentCash
+This repository is a documentation-only agent skill. It contains no executable installer, bundled script, wallet code, dependency bootstrapper, or credential collector.
 
-```bash
-npx agentcash@latest check https://pennyregwatch.com/v1/search
-npx agentcash@latest fetch https://pennyregwatch.com/v1/search -m POST -b '{"query":"latest x402 news","limit":5}'
-```
+Review `SKILL.md` before enabling it in an agent environment. Use only a separately configured x402-capable wallet/payment capability that you already trust. PennyAPI never needs your wallet private key.
 
-To persist Penny in AgentCash:
-
-```bash
-npx agentcash@latest add https://pennyregwatch.com
-```
-
-## Important
-
-This repository is only a distribution artifact. It does **not** modify the PennyAPI production runtime.
+This skill is only a distribution artifact. It does **not** modify the PennyAPI production runtime.

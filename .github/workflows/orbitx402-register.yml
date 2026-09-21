@@ -1,0 +1,28 @@
+name: Register Penny on OrbitX402
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orbitx402-register.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Register canonical Penny origin
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o response.json -w "%{http_code}" \
+            -X POST https://api.orbitx402.com/api/servers/register \
+            -H "Content-Type: application/json" \
+            --data '{"url":"https://pennyregwatch.com"}')
+          echo "HTTP $code"
+          cat response.json
+          test "$code" -ge 200
+          test "$code" -lt 500
